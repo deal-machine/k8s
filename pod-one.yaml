@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-one
+  labels:
+    app: first-pod
+spec:
+  containers:
+    - name: nginx-pod-one
+      image: nginx:stable
+      ports:
+        - containerPort: 80
+      resources:
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
