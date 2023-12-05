@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ss-noticias
+spec:
+  replicas: 2
+  template:
+    metadata: 
+      labels: 
+        app: sistema-noticias
+      name: ss-noticias-pod    
+    spec:
+      containers:
+        - name: ss-noticias-container
+          image: aluracursos/sistema-noticias:1
+          ports:
+            - containerPort: 80
+          envFrom: 
+            - configMapRef:
+                name: cm-sistema-noticias
+          volumeMounts:
+            - name: imagens
+              mountPath: /var/www/html/uploads # pasta relativa de dentro do container 
+            - name: sessao
+              mountPath: /tmp
+      volumes: 
+        - name: imagens
+          persistentVolumeClaim:
+            claimName: pv-imagens-noticias
+        - name: sessao
+          persistentVolumeClaim:
+            claimName: pv-sessao-noticias
+  selector: 
+    matchLabels:
+      app: sistema-noticias
+  serviceName: sistema-noticias-svc
+    
